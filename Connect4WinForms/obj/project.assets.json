@@ -17,8 +17,8 @@
   "libraries": {
     "Connect4/1.0.0": {
       "type": "project",
-      "path": "../../BeadandoTesztelgetes/Connect4/Connect4.csproj",
-      "msbuildProject": "../../BeadandoTesztelgetes/Connect4/Connect4.csproj"
+      "path": "../Connect4/Connect4.csproj",
+      "msbuildProject": "../Connect4/Connect4.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -53,8 +53,8 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\Legion\\Desktop\\BeadandoTesztelgetes\\Connect4\\Connect4.csproj": {
-              "projectPath": "C:\\Users\\Legion\\Desktop\\BeadandoTesztelgetes\\Connect4\\Connect4.csproj"
+            "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj": {
+              "projectPath": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj"
             }
           }
         }

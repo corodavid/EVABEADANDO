@@ -398,7 +398,14 @@ namespace Connect4.Model
 
         #endregion
 
+        #region Private timer event Handlers
 
+        private void OnTimerTick()
+        {
+
+        }
+
+        #endregion
     }
 
 }

@@ -9,8 +9,16 @@ using System.Runtime.Serialization.Formatters;
 using System.Drawing;
 
 
+
+
 namespace Connect4.Model
 {
+
+    public enum WhichPlayer
+    {
+        FIRST,
+        SECOND
+    }
 
     public enum GameState
     {
@@ -28,7 +36,7 @@ namespace Connect4.Model
         
         private GameTable _table; //Table of the values
 
-        private Boolean _whichPlayer; // First player = true Second = false
+        private WhichPlayer _whichPlayer;
 
         private IGameTableDataAccess _dataAccess;
 
@@ -58,7 +66,7 @@ namespace Connect4.Model
         #endregion
 
         #region Events
-        public event EventHandler<int>? TimerTick;
+        public event EventHandler<Connect4TimerEventArgs>? TimerTick;
         public event EventHandler<Connect4FieldEventArgs>? BoardChanged;
         public event EventHandler<Connect4EventArgs>? GameEnded;
 
@@ -70,7 +78,7 @@ namespace Connect4.Model
         public GameModel(GameTable gameTable)
         {
             _table = gameTable;
-            _whichPlayer = true; // first player
+            _whichPlayer = WhichPlayer.FIRST; // first player
             _dataAccess = new GameTableDataAccess();
             _state = GameState.RUNNING;
 
@@ -83,15 +91,25 @@ namespace Connect4.Model
             _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
             _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
 
-            _firstPlayerTimer.Start();
+            //_firstPlayerTimer.Start();
 
         }
 
-        public GameModel() { }
+        public GameModel(IGameTableDataAccess dataAccess) 
+        {
+            _dataAccess = dataAccess;
+        }
 
         #endregion
 
         #region Public methods
+
+
+        public void StartGame()
+        {
+            _whichPlayer = WhichPlayer.FIRST;
+            _firstPlayerTimer.Start();
+        }
 
 
         public void Round(int col)
@@ -127,7 +145,18 @@ namespace Connect4.Model
                 default:
                     break;
             }
-            _whichPlayer = !_whichPlayer;
+            if(_whichPlayer == WhichPlayer.FIRST)
+            {
+                _whichPlayer = WhichPlayer.SECOND;
+                _firstPlayerTimer.Stop();
+                _secondPlayerTimer.Start();
+            }
+            else
+            {
+                _whichPlayer = WhichPlayer.FIRST;
+                _secondPlayerTimer.Stop();
+                _firstPlayerTimer.Start();
+            }
         }
 
 
@@ -143,7 +172,7 @@ namespace Connect4.Model
                 return false;
             int row = _table.FirstNoneFieldInColumn(col);
             FieldStatus fieldStatus;
-            if (_whichPlayer)
+            if (_whichPlayer == WhichPlayer.FIRST)
                 fieldStatus = FieldStatus.X;
             else
                 fieldStatus = FieldStatus.O;
@@ -167,20 +196,20 @@ namespace Connect4.Model
             {
                 //I need to trigger the event here
                 //findWinners(col, WinType.COLUMN);
-                return _whichPlayer ? GameState.FIRST : GameState.SECOND;
+                return _whichPlayer == WhichPlayer.FIRST ? GameState.FIRST : GameState.SECOND;
             }
             if (checkRow(row,col))
             {
                 //I need to trigger the event here
 
                 //findWinners(col, WinType.ROW);
-                return _whichPlayer ? GameState.FIRST : GameState.SECOND;
+                return _whichPlayer == WhichPlayer.FIRST ? GameState.FIRST : GameState.SECOND;
             }
             if(checkDiagonals(row,col))
             {
                 //I need to trigger the event here
                 //findWinners(col, WinType.DIAGONAL);
-                return _whichPlayer ? GameState.FIRST : GameState.SECOND;
+                return _whichPlayer == WhichPlayer.FIRST ? GameState.FIRST : GameState.SECOND;
             }
             return GameState.RUNNING;
 
@@ -327,6 +356,7 @@ namespace Connect4.Model
             }
             if (counter == 4)
                 return winners;
+            counter = 0;
             winners = new (int, int)[4];
             for (int j = (col - 3) > 0 ? col - 3 : 0; j < col + 4 && counter < 4 && j < _table.Size; j++)
             {
@@ -400,9 +430,26 @@ namespace Connect4.Model
 
         #region Private timer event Handlers
 
-        private void OnTimerTick()
+        private void OnTimerTick(object sender, int remainingTime)
         {
+            TimerTick?.Invoke(this,new Connect4TimerEventArgs(_whichPlayer, remainingTime));
+        }
 
+        private void OnFirstPlayerExpired(object? sender, EventArgs e)
+        {
+            _state = GameState.SECOND;
+            _firstPlayerTimer.Stop();
+            _secondPlayerTimer.Stop();
+            OnGameEnded(null);
+            
+        }
+
+        private void OnSecondPlayerExpired(object? sender, EventArgs e)
+        {
+            _state = GameState.FIRST;
+            _firstPlayerTimer.Stop();
+            _secondPlayerTimer.Stop();
+            OnGameEnded(null);
         }
 
         #endregion

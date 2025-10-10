@@ -2,7 +2,7 @@
 using Connect4.Model;
 using Connect4.Persistance;
 
-namespace Application
+namespace Connect4.Model
 {
     class Program
     {

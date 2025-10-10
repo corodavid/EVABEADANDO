@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Timers;
 
 namespace Connect4.Model
@@ -32,7 +33,7 @@ namespace Connect4.Model
             if (_remainingTime <= 0)
             {
                 Stop();
-                TimeExpired?.Invoke(this, EventArgs.Empty);
+                TimeExpired?.Invoke(this,EventArgs.Empty);
             }
         }
 

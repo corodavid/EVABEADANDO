@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4WinForms\\Connect4WinForms.csproj": {}
+    "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\Connect4WinForms.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4WinForms\\Connect4WinForms.csproj": {
+    "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\Connect4WinForms.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4WinForms\\Connect4WinForms.csproj",
+        "projectUniqueName": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\Connect4WinForms.csproj",
         "projectName": "Connect4WinForms",
-        "projectPath": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4WinForms\\Connect4WinForms.csproj",
-        "packagesPath": "C:\\Users\\Legion\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4WinForms\\obj\\",
+        "projectPath": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\Connect4WinForms.csproj",
+        "packagesPath": "C:\\Users\\qanccw\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Legion\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\qanccw\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,14 +26,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj": {
-                "projectPath": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj"
+              "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Connect4.csproj": {
+                "projectPath": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Connect4.csproj"
               }
             }
           }
@@ -38,7 +43,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -62,21 +73,25 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj": {
+    "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Connect4.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj",
+        "projectUniqueName": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Connect4.csproj",
         "projectName": "Connect4",
-        "projectPath": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\Connect4.csproj",
-        "packagesPath": "C:\\Users\\Legion\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Legion\\Desktop\\Connect4\\Connect4\\obj\\",
+        "projectPath": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Connect4.csproj",
+        "packagesPath": "C:\\Users\\qanccw\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Legion\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\qanccw\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -84,6 +99,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -96,7 +112,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -117,7 +139,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

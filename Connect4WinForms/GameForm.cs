@@ -18,14 +18,14 @@ namespace Connect4WinForms
         {
             InitializeComponent();
 
-            IGameTableDataAccess _dataAccess = new GameTableDataAccess();
+            IGameTableDataAccess _dataAccess = null;
             _gameModel = new GameModel(_dataAccess);
 
-            _gameModel.OnBoardChanged += new EventHandler<Connect4FieldEventArgs>(Game_BoardChanged);
-            _gameModel.OnGameEnded += new EventHandler<Connect4EventArgs>(Game_Ended);
-            _gameModel.OnTimerTick += new Eventhandler<EventArgs>(Game_TimerTick);
+           // _gameModel.BoardChanged += new EventHandler<Connect4FieldEventArgs>(Game_BoardChanged);
+            //_gameModel.GameEnded += new EventHandler<Connect4EventArgs>(Game_Ended);
+            //_gameModel.TimerTick += new EventHandler<Connect4TimerEventArgs>(Game_TimerTick);
             
-            SetupMenus();
+            //SetupMenus();
         }
 
          
@@ -36,9 +36,9 @@ namespace Connect4WinForms
             {
                 for (int j = 0; j < n; j++)
                 {
-                        [i, j].Text = _model[i,j] == FieldStatus.NONE
+                        _buttonGrid[i, j].Text = _gameModel[i,j] == FieldStatus.NONE
                             ? String.Empty
-                            : _model[i, j].ToString();
+                            : _gameModel[i, j].ToString();
                         
                         _buttonGrid[i, j].Enabled = true;
                         _buttonGrid[i, j].BackColor = Color.White;

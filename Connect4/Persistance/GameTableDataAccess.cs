@@ -8,7 +8,7 @@ namespace Connect4.Persistance
 {
     public class GameTableDataAccess : IGameTableDataAccess
     {
-        private readonly GameTable _table;
+        private readonly GameTable _table = null;
         public GameTableDataAccess() {}
 
         public async Task<GameTable> LoadAsync(string path)

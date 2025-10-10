@@ -1,3 +1,7 @@
+using System;
+using System.Windows.Forms;
+
+
 namespace Connect4WinForms
 {
     internal static class Program

@@ -23,7 +23,7 @@ namespace Connect4.Persistance
         /// .          .      .  
         /// (n,0) (n,1) ... (n,n)
         /// </summary>
-        private FieldStatus[,] _fields { get; set; }
+        private FieldStatus[,] _fields;
 
         #endregion
 

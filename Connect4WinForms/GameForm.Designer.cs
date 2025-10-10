@@ -32,8 +32,9 @@
             _menuFile = new ToolStripMenuItem();
             _menuFileNewGame = new ToolStripMenuItem();
             _menuFileLoadgame = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripMenuItem();
+            _menuFileSaveGame = new ToolStripMenuItem();
             _openFileDialog = new OpenFileDialog();
+            _saveFileDialog = new SaveFileDialog();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -48,7 +49,7 @@
             // 
             // _menuFile
             // 
-            _menuFile.DropDownItems.AddRange(new ToolStripItem[] { _menuFileNewGame, _menuFileLoadgame, toolStripMenuItem1 });
+            _menuFile.DropDownItems.AddRange(new ToolStripItem[] { _menuFileNewGame, _menuFileLoadgame, _menuFileSaveGame });
             _menuFile.Name = "_menuFile";
             _menuFile.Size = new Size(37, 20);
             _menuFile.Text = "File";
@@ -56,21 +57,22 @@
             // _menuFileNewGame
             // 
             _menuFileNewGame.Name = "_menuFileNewGame";
-            _menuFileNewGame.Size = new Size(180, 22);
+            _menuFileNewGame.Size = new Size(133, 22);
             _menuFileNewGame.Text = "New game";
             _menuFileNewGame.Click += _menuFileNewGame_Click;
             // 
             // _menuFileLoadgame
             // 
             _menuFileLoadgame.Name = "_menuFileLoadgame";
-            _menuFileLoadgame.Size = new Size(180, 22);
+            _menuFileLoadgame.Size = new Size(133, 22);
             _menuFileLoadgame.Text = "Load game";
             // 
-            // toolStripMenuItem1
+            // _menuFileSaveGame
             // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(180, 22);
-            toolStripMenuItem1.Text = "Save game";
+            _menuFileSaveGame.Name = "_menuFileSaveGame";
+            _menuFileSaveGame.Size = new Size(133, 22);
+            _menuFileSaveGame.Text = "Save game";
+            _menuFileSaveGame.Click += _menuFileSaveGame_Click;
             // 
             // _openFileDialog
             // 
@@ -97,7 +99,8 @@
         private ToolStripMenuItem _menuFile;
         private ToolStripMenuItem _menuFileNewGame;
         private ToolStripMenuItem _menuFileLoadgame;
-        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem _menuFileSaveGame;
         private OpenFileDialog _openFileDialog;
+        private SaveFileDialog _saveFileDialog;
     }
 }

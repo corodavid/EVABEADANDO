@@ -14,6 +14,9 @@ using System.Drawing;
 namespace Connect4.Model
 {
 
+
+    
+
     public enum WhichPlayer
     {
         FIRST,
@@ -32,6 +35,9 @@ namespace Connect4.Model
 
     public class GameModel
     {
+
+        private const int EachPlayersStartingTimeInSeconds = 180;
+
         #region Fields
 
         
@@ -62,6 +68,7 @@ namespace Connect4.Model
             set { _table[row, col] = value; }
         }
 
+        public int TableSize {  get { return _table.Size; } }
 
 
         #endregion
@@ -83,8 +90,8 @@ namespace Connect4.Model
             _dataAccess = new GameTableDataAccess();
             _state = GameState.RUNNING;
 
-            _firstPlayerTimer = new GameTimer(180);
-            _secondPlayerTimer = new GameTimer(180);
+            _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+            _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
 
             _firstPlayerTimer.TimerTick += OnTimerTick;
             _secondPlayerTimer.TimerTick += OnTimerTick;
@@ -101,13 +108,31 @@ namespace Connect4.Model
             _dataAccess = dataAccess;
         }
 
+        public GameModel(int n) 
+        {
+            _table = new GameTable(n);
+            _dataAccess = new GameTableDataAccess();
+            _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+            _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+        }
+
         #endregion
 
         #region Public methods
 
 
+        public void NewGame()
+        {
+            int size = _table.Size;
+            _table = new GameTable(size);
+            _dataAccess = new GameTableDataAccess();
+            _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+            _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+        }
+
         public void StartGame()
         {
+            _state = GameState.RUNNING;
             _whichPlayer = WhichPlayer.FIRST;
             _firstPlayerTimer.Start();
         }

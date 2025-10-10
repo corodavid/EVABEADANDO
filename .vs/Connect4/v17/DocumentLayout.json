@@ -9,22 +9,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EDAB6261-BE2E-4037-B1EA-9705FC774853}|Connect4WinForms\\Connect4WinForms.csproj|c:\\users\\qanccw\\desktop\\beadando\\evabeadando\\connect4winforms\\gameform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{EDAB6261-BE2E-4037-B1EA-9705FC774853}|Connect4WinForms\\Connect4WinForms.csproj|solutionrelative:connect4winforms\\gameform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|c:\\users\\qanccw\\desktop\\beadando\\evabeadando\\connect4\\model\\gamemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|solutionrelative:connect4\\model\\gamemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|c:\\users\\qanccw\\desktop\\beadando\\evabeadando\\connect4\\model\\connect4timereventargs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|solutionrelative:connect4\\model\\connect4timereventargs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|c:\\users\\qanccw\\desktop\\beadando\\evabeadando\\connect4\\model\\gametimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|solutionrelative:connect4\\model\\gametimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|c:\\users\\qanccw\\desktop\\beadando\\evabeadando\\connect4\\persistance\\gametabledataaccess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C71D9822-DAA9-4C00-BA2D-7E9423DC350F}|Connect4\\Connect4.csproj|solutionrelative:connect4\\persistance\\gametabledataaccess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,21 +18,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GameTableDataAccess.cs",
-              "DocumentMoniker": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Persistance\\GameTableDataAccess.cs",
-              "RelativeDocumentMoniker": "Connect4\\Persistance\\GameTableDataAccess.cs",
-              "ToolTip": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Persistance\\GameTableDataAccess.cs",
-              "RelativeToolTip": "Connect4\\Persistance\\GameTableDataAccess.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-10T11:34:13.685Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -57,9 +28,9 @@
               "RelativeDocumentMoniker": "Connect4WinForms\\GameForm.cs",
               "ToolTip": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\GameForm.cs",
               "RelativeToolTip": "Connect4WinForms\\GameForm.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAApwCMAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAhwCgAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-10T11:19:43.975Z",
+              "WhenOpened": "2025-10-10T12:00:19.702Z",
               "EditorCaption": ""
             },
             {
@@ -71,47 +42,8 @@
               "ToolTip": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4WinForms\\GameForm.cs [Design]",
               "RelativeToolTip": "Connect4WinForms\\GameForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-10T11:19:39.937Z",
+              "WhenOpened": "2025-10-10T12:00:17.248Z",
               "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GameTimer.cs",
-              "DocumentMoniker": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Model\\GameTimer.cs",
-              "RelativeDocumentMoniker": "Connect4\\Model\\GameTimer.cs",
-              "ToolTip": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Model\\GameTimer.cs",
-              "RelativeToolTip": "Connect4\\Model\\GameTimer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-10T11:16:08.658Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Connect4TimerEventArgs.cs",
-              "DocumentMoniker": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Model\\Connect4TimerEventArgs.cs",
-              "RelativeDocumentMoniker": "Connect4\\Model\\Connect4TimerEventArgs.cs",
-              "ToolTip": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Model\\Connect4TimerEventArgs.cs",
-              "RelativeToolTip": "Connect4\\Model\\Connect4TimerEventArgs.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAoAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-10T11:01:30.515Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "GameModel.cs",
-              "DocumentMoniker": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Model\\GameModel.cs",
-              "RelativeDocumentMoniker": "Connect4\\Model\\GameModel.cs",
-              "ToolTip": "C:\\Users\\qanccw\\Desktop\\Beadando\\EVABEADANDO\\Connect4\\Model\\GameModel.cs",
-              "RelativeToolTip": "Connect4\\Model\\GameModel.cs",
-              "ViewState": "AgIAAFMBAAAAAAAAAAAhwGwBAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-10T10:16:32.992Z",
-              "EditorCaption": ""
             }
           ]
         }

@@ -83,7 +83,7 @@ namespace Connect4.Model
             _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
             _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
 
-            _firstPlayerTimer.Start();
+            //_firstPlayerTimer.Start();
 
         }
 

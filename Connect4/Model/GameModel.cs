@@ -23,6 +23,7 @@ namespace Connect4.Model
     public enum GameState
     {
         RUNNING,
+        PAUSED,
         DRAW,
         FIRST,
         SECOND
@@ -111,7 +112,12 @@ namespace Connect4.Model
             _firstPlayerTimer.Start();
         }
 
-
+        /// <summary>
+        /// Tries to insert in the given column, if it is full it does nothing
+        /// It triggers BoardChanged after it inserted into the table
+        /// It triggers GameEnded if there is a winner by move or a draw if it is full
+        /// </summary>
+        /// <param name="col">The y coordinate of the button</param>
         public void Round(int col)
         {
             TryInsert(col);
@@ -122,29 +128,22 @@ namespace Connect4.Model
             {
                 case GameState.FIRST:
                     {
-                        Console.WriteLine($"THE FIRST PLAYER WINS!!!\nWinning Coords:");
+                        //Console.WriteLine($"THE FIRST PLAYER WINS!!!\nWinning Coords:");
                         (int Row,int Col)[] winners = findWinners(_table.FirstNoneFieldInColumn(col) + 1,col);
-                        //for (int i = 0; i < 4; i++)
-                          //  Console.Write($"{winners[i]}  ");
                         GameEnded?.Invoke(this, new Connect4EventArgs(GameState.FIRST, winners));
-                        //EVENT
-                        
-                        break;
+                        return;
                     }
                 case GameState.SECOND: 
                     {
-                        Console.WriteLine($"THE SECOND PLAYER WINS!!!\nWinning Coords:");
+                        //Console.WriteLine($"THE SECOND PLAYER WINS!!!\nWinning Coords:");
                         (int, int)[] winners = findWinners(_table.FirstNoneFieldInColumn(col) + 1, col);
-                        //for (int i = 0; i < 4; i++)
-                            //Console.Write($"{winners[i]} ");
                         GameEnded?.Invoke(this, new Connect4EventArgs(GameState.SECOND, winners));
-                        //EVENT
-
-                        break;
+                        return;
                     }
                 default:
                     break;
             }
+
             if(_whichPlayer == WhichPlayer.FIRST)
             {
                 _whichPlayer = WhichPlayer.SECOND;
@@ -157,6 +156,25 @@ namespace Connect4.Model
                 _secondPlayerTimer.Stop();
                 _firstPlayerTimer.Start();
             }
+        }
+
+        public void Pause()
+        {
+            if (_whichPlayer == WhichPlayer.FIRST)
+                _firstPlayerTimer.Pause();
+            else
+                _secondPlayerTimer.Pause();
+            _state = GameState.PAUSED;
+
+        }
+
+        public void Resume()
+        {
+            if (_whichPlayer == WhichPlayer.FIRST)
+                _firstPlayerTimer.Resume();
+            else
+                _secondPlayerTimer.Resume();
+            _state = GameState.RUNNING;
         }
 
 
@@ -181,8 +199,7 @@ namespace Connect4.Model
         }
 
         /// <summary>
-        /// Which player cannot change until the check has completed,
-        /// this method checks for win and flips _whichPlayer
+        /// Runs all the checks for wins, and draw
         /// </summary>
         /// <param name="col"></param>
         /// <returns></returns>
@@ -194,21 +211,14 @@ namespace Connect4.Model
             int row = _table.FirstNoneFieldInColumn(col) + 1;
             if (checkColumn(row,col))
             {
-                //I need to trigger the event here
-                //findWinners(col, WinType.COLUMN);
                 return _whichPlayer == WhichPlayer.FIRST ? GameState.FIRST : GameState.SECOND;
             }
             if (checkRow(row,col))
             {
-                //I need to trigger the event here
-
-                //findWinners(col, WinType.ROW);
                 return _whichPlayer == WhichPlayer.FIRST ? GameState.FIRST : GameState.SECOND;
             }
             if(checkDiagonals(row,col))
             {
-                //I need to trigger the event here
-                //findWinners(col, WinType.DIAGONAL);
                 return _whichPlayer == WhichPlayer.FIRST ? GameState.FIRST : GameState.SECOND;
             }
             return GameState.RUNNING;
@@ -217,6 +227,31 @@ namespace Connect4.Model
 
         }
 
+
+        #endregion
+
+        #region Public File
+
+        public async Task LoadGameAsync(String path)
+        {
+            if (_dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+            _table = await _dataAccess.LoadAsync(path);
+            int db = 0;
+            for(int i = 0; i < _table.Size; i++)
+            {
+                for(int j = 0; j < _table.Size;j++)
+                {
+                    if (_table[i, j] != FieldStatus.NONE)
+                        db++; 
+                }
+            }
+            if(db%2 == 0)
+            {
+                _whichPlayer = WhichPlayer.FIRST;
+            }
+
+        }
 
         #endregion
 

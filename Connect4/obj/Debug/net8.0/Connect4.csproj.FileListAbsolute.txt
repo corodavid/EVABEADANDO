@@ -50,3 +50,10 @@ C:\Users\qanccw\Desktop\Beadando\EVABEADANDO\Connect4\bin\Debug\net8.0\Connect4.
 C:\Users\qanccw\Desktop\Beadando\EVABEADANDO\Connect4\bin\Debug\net8.0\Connect4.pdb
 C:\Users\qanccw\Desktop\Beadando\EVABEADANDO\Connect4\obj\Debug\net8.0\Connect4.genruntimeconfig.cache
 C:\Users\qanccw\Desktop\Beadando\EVABEADANDO\Connect4\obj\Debug\net8.0\ref\Connect4.dll
+C:\Users\Legion\Desktop\Connect4\Connect4\bin\Debug\net8.0\Connect4.exe
+C:\Users\Legion\Desktop\Connect4\Connect4\bin\Debug\net8.0\Connect4.deps.json
+C:\Users\Legion\Desktop\Connect4\Connect4\bin\Debug\net8.0\Connect4.runtimeconfig.json
+C:\Users\Legion\Desktop\Connect4\Connect4\bin\Debug\net8.0\Connect4.dll
+C:\Users\Legion\Desktop\Connect4\Connect4\bin\Debug\net8.0\Connect4.pdb
+C:\Users\Legion\Desktop\Connect4\Connect4\obj\Debug\net8.0\Connect4.genruntimeconfig.cache
+C:\Users\Legion\Desktop\Connect4\Connect4\obj\Debug\net8.0\ref\Connect4.dll

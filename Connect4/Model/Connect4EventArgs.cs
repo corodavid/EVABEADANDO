@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Connect4.Model
 {
+
+    /// <summary>
+    /// Carries the gamestate and if there is a winner it has the winning field coordinates.
+    /// If the game is a draw or on player won on time, winning coords shpuld be null!!!
+    /// </summary>
     public class Connect4EventArgs : EventArgs
     {
         private GameState _gameState;

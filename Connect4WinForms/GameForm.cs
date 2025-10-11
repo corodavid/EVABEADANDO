@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using Connect4.Model;
 using Connect4.Persistance;
@@ -19,22 +20,31 @@ namespace Connect4WinForms
         {
             InitializeComponent();
             _size = 10;
-            _gameModel = new GameModel(10);
 
-            _gameModel.BoardChanged += new EventHandler<Connect4FieldEventArgs>(Game_BoardChanged);
-            _gameModel.GameEnded += new EventHandler<Connect4EventArgs>(Game_Ended);
-            //_gameModel.TimerTick += new EventHandler<Connect4TimerEventArgs>(Game_TimerTick);
-            //SetupMenus();
+            InitializeModel();
+            
             GenerateTable();
-            SetupTable();
+            //SetupMenus();
+            //SetupTable();
+            
+            _gameModel!.StartGame();
+
         }
 
 
+        public void InitializeModel()
+        {
+            _gameModel = new GameModel(_size);
+            _gameModel.BoardChanged += new EventHandler<Connect4FieldEventArgs>(Game_BoardChanged);
+            _gameModel.GameEnded += new EventHandler<Connect4EventArgs>(Game_Ended);
+            _gameModel.TimerTick += new EventHandler<Connect4TimerEventArgs>(Game_TimerTick);
+        }
+
         private void GenerateTable()
         {
-            _buttonGrid = new Button[_gameModel.TableSize, _gameModel.TableSize];
-            for (Int32 i = 0; i < _gameModel.TableSize; i++)
-                for (Int32 j = 0; j < _gameModel.TableSize; j++)
+            _buttonGrid = new Button[_size, _size];
+            for (Int32 i = 0; i < _size; i++)
+                for (Int32 j = 0; j < _size; j++)
                 {
                     _buttonGrid[i, j] = new Button();
                     _buttonGrid[i, j].Location = new Point(5 + 50 * j, 35 + 50 * i); // elhelyezkedés
@@ -42,7 +52,7 @@ namespace Connect4WinForms
                     _buttonGrid[i, j].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betûtípus
                     _buttonGrid[i, j].Enabled = true;
                     _buttonGrid[i,j].Text = String.Empty;
-                    _buttonGrid[i, j].TabIndex = 100 + i * _gameModel.TableSize + j; // a gomb számát a TabIndex-ben tároljuk
+                    _buttonGrid[i, j].TabIndex = 100 + i * _size + j; // a gomb számát a TabIndex-ben tároljuk
                     _buttonGrid[i, j].FlatStyle = FlatStyle.Flat; // lapított stípus
                     _buttonGrid[i, j].MouseClick += new MouseEventHandler(ButtonGrid_MouseClick);
                     // közös eseménykezelõ hozzárendelése minden gombhoz
@@ -59,12 +69,32 @@ namespace Connect4WinForms
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    _buttonGrid[i, j].Text = String.Empty;
                     _buttonGrid[i, j].BackColor = Color.White;
+                    _buttonGrid[i, j].Text = _gameModel[i,j] != FieldStatus.NONE ? _gameModel[i,j].ToString() : String.Empty;
                     Controls.Add(_buttonGrid[i, j]);
                 }
             }
 
+        }
+
+           
+        private void Game_TimerTick(object sender, Connect4TimerEventArgs args)
+        {
+            WhichPlayer whichPlayer = args.WhichPlayer;
+            if(whichPlayer == WhichPlayer.FIRST)
+            {
+                if(_firstPlayerTimeLeftLabel.InvokeRequired)
+                    _firstPlayerTimeLeftLabel.Invoke(new Action(() => {
+                        _firstPlayerTimeLeftLabel.Text = TimeSpan.FromSeconds(args.RemaingTime).ToString("g");
+                    }));
+            }
+            else
+            {
+                if(_secondPlayerTimeLeftLabel.InvokeRequired)
+                    _secondPlayerTimeLeftLabel.Invoke(new Action(() => {
+                        _secondPlayerTimeLeftLabel.Text = TimeSpan.FromSeconds(args.RemaingTime).ToString("g");
+                    }));
+            }
         }
 
         private void Game_Ended(object sender, Connect4EventArgs args)
@@ -74,10 +104,13 @@ namespace Connect4WinForms
             switch (state)
             {
                 case GameState.DRAW:
+                    MessageBox.Show("Game ended in a draw!!!","Game ended", MessageBoxButtons.OK);
                     break;
                 case GameState.FIRST:
+                    MessageBox.Show("First PLayer WINS!!!", "Game ended", MessageBoxButtons.OK);
                     break;
                 case GameState.SECOND:
+                    MessageBox.Show("Second PLayer WINS!!!", "Game ended", MessageBoxButtons.OK);
                     break;
                 default:
                     throw new Exception();
@@ -101,14 +134,19 @@ namespace Connect4WinForms
                     _buttonGrid[i, j].Dispose();
 
                 }
-            }  
+            }
+            _buttonGrid = null;
+            _firstPlayerTimeLeftLabel.Text = "03:00:00";
+            _secondPlayerTimeLeftLabel.Text = "03:00:00";
             Random random = new Random();
-            _size = 8;
-            _gameModel = new GameModel(_size);
+            _size = random.Next(5,9);
+            _gameModel.NewGame(_size);
             GenerateTable();
-            SetupTable();
+            _gameModel.StartGame();
+            //SetupTable();
+            
         }
-
+        
         private void _menuFileSaveGame_Click(object sender, EventArgs e)
         {
             if (_saveFileDialog.ShowDialog() == DialogResult.OK)

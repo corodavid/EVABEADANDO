@@ -70,6 +70,8 @@ namespace Connect4.Model
 
         public int TableSize {  get { return _table.Size; } }
 
+        public WhichPlayer WhichPlayer { get { return _whichPlayer; } }
+
 
         #endregion
 
@@ -114,6 +116,18 @@ namespace Connect4.Model
             _dataAccess = new GameTableDataAccess();
             _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
             _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+
+            _firstPlayerTimer.TimerTick += OnTimerTick;
+            _secondPlayerTimer.TimerTick += OnTimerTick;
+
+            _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
+            _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
+        }
+
+        public GameModel()
+        {
+            _dataAccess = new GameTableDataAccess();
+            
         }
 
         #endregion
@@ -121,13 +135,11 @@ namespace Connect4.Model
         #region Public methods
 
 
-        public void NewGame()
+        public void NewGame(int size)
         {
-            int size = _table.Size;
             _table = new GameTable(size);
-            _dataAccess = new GameTableDataAccess();
-            _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
-            _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+            _firstPlayerTimer.Reset(EachPlayersStartingTimeInSeconds);
+            _secondPlayerTimer.Reset(EachPlayersStartingTimeInSeconds);
         }
 
         public void StartGame()
@@ -145,7 +157,8 @@ namespace Connect4.Model
         /// <param name="col">The y coordinate of the button</param>
         public void Round(int col)
         {
-            TryInsert(col);
+            if (_state != GameState.RUNNING || !TryInsert(col))
+                return;
             _state = CurrentGameState(col);
             int row = _table.FirstNoneFieldInColumn(col) + 1;
             BoardChanged?.Invoke(this, new Connect4FieldEventArgs(row, col));
@@ -155,14 +168,24 @@ namespace Connect4.Model
                     {
                         //Console.WriteLine($"THE FIRST PLAYER WINS!!!\nWinning Coords:");
                         (int Row,int Col)[] winners = findWinners(_table.FirstNoneFieldInColumn(col) + 1,col);
+                        _firstPlayerTimer.Stop();
                         GameEnded?.Invoke(this, new Connect4EventArgs(GameState.FIRST, winners));
+
                         return;
                     }
                 case GameState.SECOND: 
                     {
                         //Console.WriteLine($"THE SECOND PLAYER WINS!!!\nWinning Coords:");
                         (int, int)[] winners = findWinners(_table.FirstNoneFieldInColumn(col) + 1, col);
+                        _secondPlayerTimer.Stop();
                         GameEnded?.Invoke(this, new Connect4EventArgs(GameState.SECOND, winners));
+                        return;
+                    }
+                case GameState.DRAW:
+                    {
+                        _firstPlayerTimer.Stop();
+                        _secondPlayerTimer.Stop();
+                        GameEnded?.Invoke(this, new Connect4EventArgs(GameState.DRAW, null));
                         return;
                     }
                 default:

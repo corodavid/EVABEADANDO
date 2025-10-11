@@ -11,6 +11,9 @@ namespace Connect4.Model
         WhichPlayer _whichPlayer;
         int _remainingTime;
 
+        public WhichPlayer WhichPlayer { get { return _whichPlayer; } }
+        public int RemaingTime { get { return _remainingTime; } }
+
         public Connect4TimerEventArgs(WhichPlayer whichPlayer, int remainingTime)
         {
             _whichPlayer = whichPlayer;

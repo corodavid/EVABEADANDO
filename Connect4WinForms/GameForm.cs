@@ -37,30 +37,28 @@ namespace Connect4WinForms
                 for (Int32 j = 0; j < _gameModel.TableSize; j++)
                 {
                     _buttonGrid[i, j] = new Button();
-                    _buttonGrid[i, j].Location = new Point(5 + 50 * j, 35 + 50 * i); // elhelyezkedés
-                    _buttonGrid[i, j].Size = new Size(50, 50); // méret
-                    _buttonGrid[i, j].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betûtípus
+                    _buttonGrid[i, j].Location = new Point(5 + 50 * j, 35 + 50 * i); // elhelyezkedÃ©s
+                    _buttonGrid[i, j].Size = new Size(50, 50); // mÃ©ret
+                    _buttonGrid[i, j].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betÃ»tÃ­pus
                     _buttonGrid[i, j].Enabled = true;
-                    _buttonGrid[i, j].TabIndex = 100 + i * _gameModel.TableSize + j; // a gomb számát a TabIndex-ben tároljuk
-                    _buttonGrid[i, j].FlatStyle = FlatStyle.Flat; // lapított stípus
+                    _buttonGrid[i,j].Text = String.Empty;
+                    _buttonGrid[i, j].TabIndex = 100 + i * _gameModel.TableSize + j; // a gomb szÃ¡mÃ¡t a TabIndex-ben tÃ¡roljuk
+                    _buttonGrid[i, j].FlatStyle = FlatStyle.Flat; // lapÃ­tott stÃ­pus
                     _buttonGrid[i, j].MouseClick += new MouseEventHandler(ButtonGrid_MouseClick);
-                    // közös eseménykezelõ hozzárendelése minden gombhoz
-
+                    // kÃ¶zÃ¶s esemÃ©nykezelÃµ hozzÃ¡rendelÃ©se minden gombhoz
+                    _buttonGrid[i,j].BackColor = Color.White;
                     Controls.Add(_buttonGrid[i, j]);
-                    // felvesszük az ablakra a gombot
+                    // felvesszÃ¼k az ablakra a gombot
                 }
         }
 
 
         private void SetupTable()
         {
-
-            _buttonGrid = new Button[_size, _size];
             for (int i = 0; i < _size; i++)
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    _buttonGrid[i, j] = new Button();
                     _buttonGrid[i, j].Text = String.Empty;
                     _buttonGrid[i, j].BackColor = Color.White;
                     Controls.Add(_buttonGrid[i, j]);
@@ -118,14 +116,14 @@ namespace Connect4WinForms
                 try
                 {
                     throw new Connect4FileException();
-                    // játé mentése
+                    // jÃ¡tÃ© mentÃ©se
                     //await _gameModel.SaveAsync(_saveFileDialog.FileName);
                 }
                 catch (Connect4FileException)
                 {
                     MessageBox.Show(
-                        "Játék mentése sikertelen!" + Environment.NewLine +
-                        "Hibás az elérési út, vagy a könyvtár nem írható.", "Hiba!", MessageBoxButtons.OK,
+                        "JÃ¡tÃ©k mentÃ©se sikertelen!" + Environment.NewLine +
+                        "HibÃ¡s az elÃ©rÃ©si Ãºt, vagy a kÃ¶nyvtÃ¡r nem Ã­rhatÃ³.", "Hiba!", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
             }
@@ -137,11 +135,11 @@ namespace Connect4WinForms
             if (sender is Button button)
             {
 
-                // a TabIndex-bõl megkapjuk a sort és oszlopot
+                // a TabIndex-bÃµl megkapjuk a sort Ã©s oszlopot
                 Int32 x = (button.TabIndex - 100) / _gameModel.TableSize;
                 Int32 y = (button.TabIndex - 100) % _gameModel.TableSize;
 
-                _gameModel.Round(y); // lépés a játékban
+                _gameModel.Round(y); // lÃ©pÃ©s a jÃ¡tÃ©kban
             }
         }
     }

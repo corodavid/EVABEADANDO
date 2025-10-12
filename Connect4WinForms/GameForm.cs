@@ -9,11 +9,18 @@ using Connect4.Persistance;
 namespace Connect4WinForms
 {
     public partial class GameForm : Form
-    { 
+    {
+
+        #region Fields
+        
+        
         private GameModel _gameModel;
         private Button[,] _buttonGrid;
 
+        #endregion
 
+
+        #region Constructors
 
         public GameForm()
         {
@@ -22,13 +29,15 @@ namespace Connect4WinForms
             InitializeModel();
 
             GenerateTable();
-            //SetupMenus();
-            //SetupTable();
 
             _gameModel!.StartGame();
 
         }
 
+        #endregion
+
+
+        #region Initialization
 
         public void InitializeModel()
         {
@@ -37,6 +46,12 @@ namespace Connect4WinForms
             _gameModel.GameEnded += new EventHandler<Connect4EventArgs>(Game_Ended);
             _gameModel.TimerTick += new EventHandler<Connect4TimerEventArgs>(Game_TimerTick);
         }
+
+
+
+        /// <summary>
+        /// Creates a new button grid, initializes all of them
+        /// </summary>
 
         private void GenerateTable()
         {
@@ -60,6 +75,10 @@ namespace Connect4WinForms
                 }
         }
 
+        #endregion
+
+        #region private Table methods
+
         /// <summary>
         /// Inserts values of the model into the buttons.
         /// To be used when a save is loaded!!!
@@ -72,11 +91,15 @@ namespace Connect4WinForms
                 {
                     _buttonGrid[i, j].BackColor = Color.White;
                     _buttonGrid[i, j].Text = _gameModel[i, j] != FieldStatus.NONE ? _gameModel[i, j].ToString() : String.Empty;
+                    _buttonGrid[i,j].Enabled = _gameModel[i,j] == FieldStatus.NONE;
                 }
             }
 
         }
-
+        /// <summary>
+        /// Disposes all of the buttons inside of button grid.
+        /// ALWAYS to be called before any model methods that change the size of the table.
+        /// </summary>
         private void ResetTable()
         {
             for (int i = 0; i < _gameModel.TableSize; i++)
@@ -91,6 +114,16 @@ namespace Connect4WinForms
             }
         }
 
+        #endregion
+
+
+        #region Model event handlers
+
+        /// <summary>
+        /// Changes the shown time every second.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
 
         private void Game_TimerTick(object sender, Connect4TimerEventArgs args)
         {
@@ -112,15 +145,29 @@ namespace Connect4WinForms
                     }));
             }
         }
-
+        /// <summary>
+        /// Highlights the winning fields if thez exist.
+        /// Shows the result in a MessageBox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args">Contains the state and the winning coords, if the latter is null we skip highlighting.</param>
+        /// <exception cref="Exception"></exception>
         private void Game_Ended(object sender, Connect4EventArgs args)
         {
             GameState state = args.GameState;
             (int Row, int Col)[] coords = args.WinningCoordinates;
+            if(coords.Length != 0)
+            {
+                for(int i = 0; i < coords.Length; i++) 
+                {
+                    _buttonGrid[coords[i].Row, coords[i].Col].BackColor = Color.Red;
+                }
+            }
             switch (state)
             {
                 case GameState.DRAW:
                     MessageBox.Show("Game ended in a draw!!!", "Game ended", MessageBoxButtons.OK);
+                    
                     break;
                 case GameState.FIRST:
                     MessageBox.Show("First PLayer WINS!!!", "Game ended", MessageBoxButtons.OK);
@@ -133,11 +180,28 @@ namespace Connect4WinForms
             }
         }
 
+        /// <summary>
+        /// Inputs the changes of the model into the UI.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+
         private void Game_BoardChanged(object sender, Connect4FieldEventArgs args)
         {
             _buttonGrid[args.X, args.Y].Text = _gameModel[args.X, args.Y].ToString();
+            _buttonGrid[args.X, args.Y].Enabled = false;
         }
 
+        #endregion
+
+        #region Menu event handlers
+        /// <summary>
+        /// Pauses the game for consistency, resets the table, 
+        /// then generates a new one.
+        /// TODO: Input the size of the field!!!
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void _menuFileNewGame_Click(object sender, EventArgs e)
         {
             _gameModel.Pause();
@@ -150,7 +214,11 @@ namespace Connect4WinForms
             _gameModel.StartGame();
 
         }
-
+        /// <summary>
+        /// Checks if the game is running, and in that case will resume it after saving.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void _menuFileSaveGame_Click(object sender, EventArgs e)
         {
             if (_saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -177,7 +245,11 @@ namespace Connect4WinForms
 
         }
 
-
+        /// <summary>
+        /// Gets the coordinates from the button and then passes the model the column.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
 
         private void ButtonGrid_MouseClick(object sender, EventArgs args)
         {
@@ -191,6 +263,12 @@ namespace Connect4WinForms
                 _gameModel.Round(y); // lépés a játékban
             }
         }
+
+        /// <summary>
+        /// Resets the table and loads in the given table from the file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private async void _menuFileLoadgame_Click(object sender, EventArgs e)
         {
@@ -213,5 +291,7 @@ namespace Connect4WinForms
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -12,10 +12,6 @@ using System.Drawing;
 
 
 namespace Connect4.Model
-{
-
-
-    
 
     public enum WhichPlayer
     {
@@ -41,7 +37,7 @@ namespace Connect4.Model
         #region Fields
 
         
-        private GameTable _table; //Table of the values
+        private GameTable _table;
 
         private WhichPlayer _whichPlayer;
 
@@ -85,12 +81,16 @@ namespace Connect4.Model
 
         #region Constructors
 
+
+        /// <summary>
+        /// For testing, assings everything and subscribes to events.
+        /// </summary>
+        /// <param name="gameTable"></param>
         public GameModel(GameTable gameTable)
         {
             _table = gameTable;
-            _whichPlayer = WhichPlayer.FIRST; // first player
+            _whichPlayer = WhichPlayer.FIRST;
             _dataAccess = new GameTableDataAccess();
-            _state = GameState.RUNNING;
 
             _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
             _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
@@ -101,15 +101,26 @@ namespace Connect4.Model
             _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
             _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
 
-            //_firstPlayerTimer.Start();
-
         }
+
+        /// <summary>
+        /// Mainly for testing.
+        /// Only assigns dataAccess.
+        /// </summary>
+        /// <param name="dataAccess"></param>
 
         public GameModel(IGameTableDataAccess dataAccess) 
         {
             _dataAccess = dataAccess;
         }
 
+        /// <summary>
+        /// For first creation.
+        /// Creates and empty table of nxn.
+        /// Two timers at full time.
+        /// And subscribes all neccessary events.
+        /// </summary>
+        /// <param name="n"></param>
         public GameModel(int n) 
         {
             _table = new GameTable(n);
@@ -124,17 +135,15 @@ namespace Connect4.Model
             _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
         }
 
-        public GameModel()
-        {
-            _dataAccess = new GameTableDataAccess();
-            
-        }
-
         #endregion
 
         #region Public methods
 
-
+        /// <summary>
+        /// Creates new empty table of size x size.
+        /// Resets all timers.
+        /// </summary>
+        /// <param name="size"></param>
         public void NewGame(int size)
         {
             _table = new GameTable(size);

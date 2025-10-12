@@ -205,7 +205,10 @@ namespace Connect4.Model
                 _firstPlayerTimer.Start();
             }
         }
-
+        /// <summary>
+        /// Pauses the game model.
+        /// Stop the current timer and doesnt allow insertions.
+        /// </summary>
         public void Pause()
         {
             if (_whichPlayer == WhichPlayer.FIRST)
@@ -215,6 +218,10 @@ namespace Connect4.Model
             _state = GameState.PAUSED;
 
         }
+
+        /// <summary>
+        /// Starts timer, allows insertions.
+        /// </summary>
 
         public void Resume()
         {
@@ -280,11 +287,13 @@ namespace Connect4.Model
 
         #region Public File
 
-        public async Task LoadGameAsync(String path)
+        public async Task LoadAsync(String path)
         {
             if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
-            _table = await _dataAccess.LoadAsync(path);
+            (int firstRemainingTime, int secondRemainingTime, _table)= await _dataAccess.LoadAsync(path);
+            _firstPlayerTimer.Reset(firstRemainingTime);
+            _secondPlayerTimer.Reset(secondRemainingTime);
             int db = 0;
             for(int i = 0; i < _table.Size; i++)
             {
@@ -295,10 +304,17 @@ namespace Connect4.Model
                 }
             }
             if(db%2 == 0)
-            {
                 _whichPlayer = WhichPlayer.FIRST;
-            }
+            else
+                _whichPlayer= WhichPlayer.SECOND;
 
+        }
+
+        public async Task SaveAsync(String path)
+        {
+            if (_dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+            await _dataAccess.SaveAsync(path, _firstPlayerTimer.RemainingTime, _secondPlayerTimer.RemainingTime, _table);
         }
 
         #endregion

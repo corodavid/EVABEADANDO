@@ -8,8 +8,8 @@ namespace Connect4.Persistance
 {
     public interface IGameTableDataAccess
     {
-        Task<GameTable> LoadAsync(string path);
+        Task<(int, int, GameTable)> LoadAsync(string path);
 
-        Task SaveAsync(string path, GameTable gameTable);
+        Task SaveAsync(string path, int firstRemainingTime, int secondRemainingTime, GameTable gameTable);
     }
 }

@@ -11,5 +11,8 @@ namespace Connect4.Persistance
         NONE,
         X,
         O
+        
+
     }
+
 }

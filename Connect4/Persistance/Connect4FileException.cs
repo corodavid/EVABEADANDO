@@ -10,5 +10,7 @@ namespace Connect4.Persistance
     {
         public Connect4FileException() { }
         public Connect4FileException(string message) : base(message) { }
+
+        public Connect4FileException(string message, Exception e) : base(message,e) { }
     }
 }

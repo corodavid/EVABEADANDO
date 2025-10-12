@@ -61,26 +61,34 @@
             // _menuFileNewGame
             // 
             _menuFileNewGame.Name = "_menuFileNewGame";
-            _menuFileNewGame.Size = new Size(133, 22);
+            _menuFileNewGame.Size = new Size(180, 22);
             _menuFileNewGame.Text = "New game";
             _menuFileNewGame.Click += _menuFileNewGame_Click;
             // 
             // _menuFileLoadgame
             // 
             _menuFileLoadgame.Name = "_menuFileLoadgame";
-            _menuFileLoadgame.Size = new Size(133, 22);
+            _menuFileLoadgame.Size = new Size(180, 22);
             _menuFileLoadgame.Text = "Load game";
+            _menuFileLoadgame.Click += _menuFileLoadgame_Click;
             // 
             // _menuFileSaveGame
             // 
             _menuFileSaveGame.Name = "_menuFileSaveGame";
-            _menuFileSaveGame.Size = new Size(133, 22);
+            _menuFileSaveGame.Size = new Size(180, 22);
             _menuFileSaveGame.Text = "Save game";
             _menuFileSaveGame.Click += _menuFileSaveGame_Click;
             // 
             // _openFileDialog
             // 
             _openFileDialog.FileName = "openFileDialog1";
+            _openFileDialog.Filter = "Connect4 table  (*.con)|*.con";
+            _openFileDialog.Tag = "Load game";
+            // 
+            // _saveFileDialog
+            // 
+            _saveFileDialog.Filter = "Sudoku tábla (*.con)|*.con";
+            _saveFileDialog.Title = "Save game";
             // 
             // _firstPlayer
             // 

@@ -14,8 +14,8 @@ namespace Connect4WinForms
         #region Fields
         
         
-        private GameModel _gameModel;
-        private Button[,] _buttonGrid;
+        private GameModel _gameModel = null!;
+        private Button[,] _buttonGrid = null!;
 
         #endregion
 
@@ -29,8 +29,8 @@ namespace Connect4WinForms
             InitializeModel();
 
             GenerateTable();
-
             _gameModel!.StartGame();
+           
 
         }
 
@@ -41,7 +41,7 @@ namespace Connect4WinForms
 
         public void InitializeModel()
         {
-            _gameModel = new GameModel(10);
+            _gameModel = new GameModel(7);
             _gameModel.BoardChanged += new EventHandler<Connect4FieldEventArgs>(Game_BoardChanged);
             _gameModel.GameEnded += new EventHandler<Connect4EventArgs>(Game_Ended);
             _gameModel.TimerTick += new EventHandler<Connect4TimerEventArgs>(Game_TimerTick);
@@ -59,7 +59,7 @@ namespace Connect4WinForms
             for (Int32 i = 0; i < _gameModel.TableSize; i++)
                 for (Int32 j = 0; j < _gameModel.TableSize; j++)
                 {
-                    _buttonGrid[i, j] = new Button();
+                    _buttonGrid[i, j] = new();
                     _buttonGrid[i, j].Location = new Point(5 + 50 * j, 35 + 50 * i); // elhelyezkedés
                     _buttonGrid[i, j].Size = new Size(50, 50); // méret
                     _buttonGrid[i, j].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betûtípus
@@ -67,7 +67,7 @@ namespace Connect4WinForms
                     _buttonGrid[i, j].Text = String.Empty;
                     _buttonGrid[i, j].TabIndex = 100 + i * _gameModel.TableSize + j; // a gomb számát a TabIndex-ben tároljuk
                     _buttonGrid[i, j].FlatStyle = FlatStyle.Flat; // lapított stípus
-                    _buttonGrid[i, j].MouseClick += new MouseEventHandler(ButtonGrid_MouseClick);
+                    _buttonGrid[i, j].MouseClick += new MouseEventHandler(ButtonGrid_MouseClick!);
                     // közös eseménykezelõ hozzárendelése minden gombhoz
                     _buttonGrid[i, j].BackColor = Color.White;
                     Controls.Add(_buttonGrid[i, j]);
@@ -125,7 +125,7 @@ namespace Connect4WinForms
         /// <param name="sender"></param>
         /// <param name="args"></param>
 
-        private void Game_TimerTick(object sender, Connect4TimerEventArgs args)
+        private void Game_TimerTick(object? sender, Connect4TimerEventArgs args)
         {
             WhichPlayer whichPlayer = args.WhichPlayer;
             if (whichPlayer == WhichPlayer.FIRST)
@@ -152,11 +152,11 @@ namespace Connect4WinForms
         /// <param name="sender"></param>
         /// <param name="args">Contains the state and the winning coords, if the latter is null we skip highlighting.</param>
         /// <exception cref="Exception"></exception>
-        private void Game_Ended(object sender, Connect4EventArgs args)
+        private void Game_Ended(object? sender, Connect4EventArgs args)
         {
             GameState state = args.GameState;
-            (int Row, int Col)[] coords = args.WinningCoordinates;
-            if(coords.Length != 0)
+            (int Row, int Col)[]? coords = args.WinningCoordinates;
+            if(coords != null)
             {
                 for(int i = 0; i < coords.Length; i++) 
                 {
@@ -186,7 +186,7 @@ namespace Connect4WinForms
         /// <param name="sender"></param>
         /// <param name="args"></param>
 
-        private void Game_BoardChanged(object sender, Connect4FieldEventArgs args)
+        private void Game_BoardChanged(object? sender, Connect4FieldEventArgs args)
         {
             _buttonGrid[args.X, args.Y].Text = _gameModel[args.X, args.Y].ToString();
             _buttonGrid[args.X, args.Y].Enabled = false;
@@ -202,14 +202,13 @@ namespace Connect4WinForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _menuFileNewGame_Click(object sender, EventArgs e)
+        private void menuFileNewGame_Click(object? sender, EventArgs e)
         {
             _gameModel.Pause();
             ResetTable();
             _firstPlayerTimeLeftLabel.Text = "03:00:00";
             _secondPlayerTimeLeftLabel.Text = "03:00:00";
-            Random random = new Random();
-            _gameModel.NewGame(random.Next(7,12));
+            _gameModel.NewGame((int)_sizeOfNextTable.Value);
             GenerateTable();
             _gameModel.StartGame();
 
@@ -219,20 +218,16 @@ namespace Connect4WinForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void _menuFileSaveGame_Click(object sender, EventArgs e)
+        private async void menuFileSaveGame_Click(object? sender, EventArgs e)
         {
+            _gameModel.Pause();
             if (_saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    bool restartNeeded = _gameModel.State == GameState.RUNNING;
-                    if (restartNeeded)
-                        _gameModel.Pause();
 
                     await _gameModel.SaveAsync(_saveFileDialog.FileName);
-                    if(restartNeeded)
-                        _gameModel.Resume();
-                    // játék mentése
+
                 }
                 catch (Connect4FileException)
                 {
@@ -241,6 +236,10 @@ namespace Connect4WinForms
                        "Incorrect path to file or format.", "Error!", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
+            }
+            else
+            {
+                _gameModel.Resume();
             }
 
         }
@@ -251,13 +250,12 @@ namespace Connect4WinForms
         /// <param name="sender"></param>
         /// <param name="args"></param>
 
-        private void ButtonGrid_MouseClick(object sender, EventArgs args)
+        private void ButtonGrid_MouseClick(object? sender, MouseEventArgs args)
         {
             if (sender is Button button)
             {
 
                 // a TabIndex-bõl megkapjuk a sort és oszlopot
-                Int32 x = (button.TabIndex - 100) / _gameModel.TableSize;
                 Int32 y = (button.TabIndex - 100) % _gameModel.TableSize;
 
                 _gameModel.Round(y); // lépés a játékban
@@ -270,8 +268,9 @@ namespace Connect4WinForms
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private async void _menuFileLoadgame_Click(object sender, EventArgs e)
+        private async void menuFileLoadgame_Click(object sender, EventArgs e)
         {
+            _gameModel.Pause();
             if(_openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try 
@@ -289,6 +288,19 @@ namespace Connect4WinForms
                        "Incorrect path to file or format.", "Error!", MessageBoxButtons.OK,
                        MessageBoxIcon.Error);
                 }
+            }
+            else { _gameModel.Resume(); }
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            _gameModel.Pause();
+
+            if (MessageBox.Show("Biztosan ki szeretne lépni?", "Sudoku játék", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question) == DialogResult.No)
+            { 
+                _gameModel.Resume();
+                e.Cancel = true;
             }
         }
 

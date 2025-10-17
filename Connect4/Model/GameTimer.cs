@@ -4,7 +4,7 @@ using System.Timers;
 
 namespace Connect4.Model
 {
-    public class GameTimer
+    public class GameTimer : IGameTimer
     {
         private System.Timers.Timer _timer;
         private int _remainingTime;
@@ -13,6 +13,7 @@ namespace Connect4.Model
         public event EventHandler<int>? TimerTick;
         public event EventHandler? TimeExpired;
 
+        public bool IsRunning { get { return _isRunning; } }
         public int RemainingTime { get { return _remainingTime; } }
 
         public GameTimer(int startTimeInSeconds)
@@ -61,6 +62,11 @@ namespace Connect4.Model
         {
             if (_remainingTime > 0)
                 Start();
+        }
+
+        public void RaiseTicked()
+        {
+            TimerTick?.Invoke(this, -1);
         }
     }
 }

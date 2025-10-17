@@ -13,14 +13,14 @@ namespace Connect4.Model
     /// </summary>
     public class Connect4EventArgs : EventArgs
     {
-        private GameState _gameState;
-        private (int Row, int Col)[] _winningFieldCoordinates;
+        private readonly GameState _gameState;
+        private readonly (int Row, int Col)[]? _winningFieldCoordinates;
 
         public GameState GameState { get { return _gameState; } }
 
-        public (int Row, int Col)[] WinningCoordinates { get { return _winningFieldCoordinates; } }
+        public (int Row, int Col)[]? WinningCoordinates { get { return _winningFieldCoordinates; } }
 
-        public Connect4EventArgs(GameState gameState, (int Row, int Col)[] winningFieldCoordinates)
+        public Connect4EventArgs(GameState gameState, (int Row, int Col)[]? winningFieldCoordinates)
         {
             _gameState = gameState;
             _winningFieldCoordinates = winningFieldCoordinates;

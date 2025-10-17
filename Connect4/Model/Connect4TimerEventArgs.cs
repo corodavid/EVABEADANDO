@@ -8,8 +8,8 @@ namespace Connect4.Model
 {
     public class Connect4TimerEventArgs : EventArgs
     {
-        WhichPlayer _whichPlayer;
-        int _remainingTime;
+        private readonly WhichPlayer _whichPlayer;
+        private readonly int _remainingTime;
 
         public WhichPlayer WhichPlayer { get { return _whichPlayer; } }
         public int RemaingTime { get { return _remainingTime; } }

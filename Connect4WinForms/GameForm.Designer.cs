@@ -39,7 +39,10 @@
             _firstPlayerTimeLeftLabel = new Label();
             _secondPlayer = new Label();
             _secondPlayerTimeLeftLabel = new Label();
+            _sizeOfNextTable = new NumericUpDown();
+            _tableSizeLable = new Label();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)_sizeOfNextTable).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -61,23 +64,23 @@
             // _menuFileNewGame
             // 
             _menuFileNewGame.Name = "_menuFileNewGame";
-            _menuFileNewGame.Size = new Size(180, 22);
+            _menuFileNewGame.Size = new Size(133, 22);
             _menuFileNewGame.Text = "New game";
-            _menuFileNewGame.Click += _menuFileNewGame_Click;
+            _menuFileNewGame.Click += menuFileNewGame_Click;
             // 
             // _menuFileLoadgame
             // 
             _menuFileLoadgame.Name = "_menuFileLoadgame";
-            _menuFileLoadgame.Size = new Size(180, 22);
+            _menuFileLoadgame.Size = new Size(133, 22);
             _menuFileLoadgame.Text = "Load game";
-            _menuFileLoadgame.Click += _menuFileLoadgame_Click;
+            _menuFileLoadgame.Click += menuFileLoadgame_Click;
             // 
             // _menuFileSaveGame
             // 
             _menuFileSaveGame.Name = "_menuFileSaveGame";
-            _menuFileSaveGame.Size = new Size(180, 22);
+            _menuFileSaveGame.Size = new Size(133, 22);
             _menuFileSaveGame.Text = "Save game";
-            _menuFileSaveGame.Click += _menuFileSaveGame_Click;
+            _menuFileSaveGame.Click += menuFileSaveGame_Click;
             // 
             // _openFileDialog
             // 
@@ -126,11 +129,32 @@
             _secondPlayerTimeLeftLabel.TabIndex = 4;
             _secondPlayerTimeLeftLabel.Text = "03:00:00";
             // 
+            // _sizeOfNextTable
+            // 
+            _sizeOfNextTable.Location = new Point(637, 283);
+            _sizeOfNextTable.Maximum = new decimal(new int[] { 12, 0, 0, 0 });
+            _sizeOfNextTable.Minimum = new decimal(new int[] { 6, 0, 0, 0 });
+            _sizeOfNextTable.Name = "_sizeOfNextTable";
+            _sizeOfNextTable.Size = new Size(120, 23);
+            _sizeOfNextTable.TabIndex = 5;
+            _sizeOfNextTable.Value = new decimal(new int[] { 6, 0, 0, 0 });
+            // 
+            // _tableSizeLable
+            // 
+            _tableSizeLable.AutoSize = true;
+            _tableSizeLable.Location = new Point(637, 253);
+            _tableSizeLable.Name = "_tableSizeLable";
+            _tableSizeLable.Size = new Size(118, 15);
+            _tableSizeLable.TabIndex = 6;
+            _tableSizeLable.Text = "Size of the next table:";
+            // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(_tableSizeLable);
+            Controls.Add(_sizeOfNextTable);
             Controls.Add(_secondPlayerTimeLeftLabel);
             Controls.Add(_secondPlayer);
             Controls.Add(_firstPlayerTimeLeftLabel);
@@ -139,8 +163,10 @@
             MainMenuStrip = menuStrip1;
             Name = "GameForm";
             Text = "Connect4";
+            //FormClosing += MenuFileExit_Click;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)_sizeOfNextTable).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -158,5 +184,7 @@
         private Label _firstPlayerTimeLeftLabel;
         private Label _secondPlayer;
         private Label _secondPlayerTimeLeftLabel;
+        private NumericUpDown _sizeOfNextTable;
+        private Label _tableSizeLable;
     }
 }

@@ -12,6 +12,7 @@ using System.Drawing;
 
 
 namespace Connect4.Model
+{ 
 
     public enum WhichPlayer
     {
@@ -41,13 +42,13 @@ namespace Connect4.Model
 
         private WhichPlayer _whichPlayer;
 
-        private IGameTableDataAccess _dataAccess;
+        private readonly IGameTableDataAccess _dataAccess;
 
         private GameState _state;
 
-        private GameTimer _firstPlayerTimer;
+        private readonly IGameTimer _firstPlayerTimer;
 
-        private GameTimer _secondPlayerTimer;
+        private readonly IGameTimer _secondPlayerTimer;
 
 
         #endregion
@@ -57,16 +58,21 @@ namespace Connect4.Model
 
         public GameState State { get { return _state; } }
 
+        public bool IsGameRunning { get { return State == GameState.RUNNING; } }
+
         public FieldStatus this[int row, int col]
         {
             get { return _table[row, col]; }
             
-            set { _table[row, col] = value; }
+            //set { _table[row, col] = value; }
         }
+
+        public WhichPlayer WhichPlayer { get { return _whichPlayer; } }
 
         public int TableSize {  get { return _table.Size; } }
 
-        public WhichPlayer WhichPlayer { get { return _whichPlayer; } }
+        public (int,int) RemainingTime { get { return (_firstPlayerTimer.RemainingTime, _secondPlayerTimer.RemainingTime); } }
+
 
 
         #endregion
@@ -86,32 +92,37 @@ namespace Connect4.Model
         /// For testing, assings everything and subscribes to events.
         /// </summary>
         /// <param name="gameTable"></param>
-        public GameModel(GameTable gameTable)
+        public GameModel(IGameTableDataAccess dataAccess, GameTable gameTable)
         {
             _table = gameTable;
             _whichPlayer = WhichPlayer.FIRST;
-            _dataAccess = new GameTableDataAccess();
+            _dataAccess = dataAccess;
 
             _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
             _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
 
-            _firstPlayerTimer.TimerTick += OnTimerTick;
-            _secondPlayerTimer.TimerTick += OnTimerTick;
+            _firstPlayerTimer.TimerTick += OnTimerTick!;
+            _secondPlayerTimer.TimerTick += OnTimerTick!;
 
             _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
             _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
 
         }
 
-        /// <summary>
-        /// Mainly for testing.
-        /// Only assigns dataAccess.
-        /// </summary>
-        /// <param name="dataAccess"></param>
-
-        public GameModel(IGameTableDataAccess dataAccess) 
+        public GameModel(GameTable table, IGameTimer first, IGameTimer second)
         {
-            _dataAccess = dataAccess;
+            _table = table;
+            _firstPlayerTimer = first;
+            _secondPlayerTimer = second;
+            _whichPlayer = WhichPlayer.FIRST;
+            _dataAccess = new GameTableDataAccess();
+
+            _firstPlayerTimer.TimerTick += OnTimerTick!;
+            _secondPlayerTimer.TimerTick += OnTimerTick!;
+
+            _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
+            _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
+
         }
 
         /// <summary>
@@ -120,7 +131,7 @@ namespace Connect4.Model
         /// Two timers at full time.
         /// And subscribes all neccessary events.
         /// </summary>
-        /// <param name="n"></param>
+        /// <param name="n">Size of the table</param>
         public GameModel(int n) 
         {
             _table = new GameTable(n);
@@ -130,6 +141,22 @@ namespace Connect4.Model
 
             _firstPlayerTimer.TimerTick += OnTimerTick;
             _secondPlayerTimer.TimerTick += OnTimerTick;
+
+            _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
+            _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
+        }
+
+        public GameModel(GameTable gameTable) 
+        {
+            _table = gameTable;
+            _whichPlayer = WhichPlayer.FIRST;
+            _dataAccess = new GameTableDataAccess();
+
+            _firstPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+            _secondPlayerTimer = new GameTimer(EachPlayersStartingTimeInSeconds);
+
+            _firstPlayerTimer.TimerTick += OnTimerTick!;
+            _secondPlayerTimer.TimerTick += OnTimerTick!;
 
             _firstPlayerTimer.TimeExpired += OnFirstPlayerExpired;
             _secondPlayerTimer.TimeExpired += OnSecondPlayerExpired;
@@ -151,6 +178,16 @@ namespace Connect4.Model
             _secondPlayerTimer.Reset(EachPlayersStartingTimeInSeconds);
         }
 
+        public void NewGame()
+        {
+            _firstPlayerTimer.Reset(EachPlayersStartingTimeInSeconds);
+            _secondPlayerTimer.Reset(EachPlayersStartingTimeInSeconds);
+        }
+
+        /// <summary>
+        /// On initialized model, it starts the game.
+        /// </summary>
+
         public void StartGame()
         {
             _state = GameState.RUNNING;
@@ -166,16 +203,21 @@ namespace Connect4.Model
         /// <param name="col">The y coordinate of the button</param>
         public void Round(int col)
         {
-            if (_state != GameState.RUNNING || !TryInsert(col))
+            if (_state != GameState.RUNNING)
+                return;
+            if (!TryInsert(col))
                 return;
             _state = CurrentGameState(col);
             int row = _table.FirstNoneFieldInColumn(col) + 1;
             BoardChanged?.Invoke(this, new Connect4FieldEventArgs(row, col));
             switch (State)
             {
+                case GameState.RUNNING:
+                    break;
+                case GameState.PAUSED:
+                    break;
                 case GameState.FIRST:
                     {
-                        //Console.WriteLine($"THE FIRST PLAYER WINS!!!\nWinning Coords:");
                         (int Row,int Col)[] winners = findWinners(_table.FirstNoneFieldInColumn(col) + 1,col);
                         _firstPlayerTimer.Stop();
                         GameEnded?.Invoke(this, new Connect4EventArgs(GameState.FIRST, winners));
@@ -184,7 +226,6 @@ namespace Connect4.Model
                     }
                 case GameState.SECOND: 
                     {
-                        //Console.WriteLine($"THE SECOND PLAYER WINS!!!\nWinning Coords:");
                         (int, int)[] winners = findWinners(_table.FirstNoneFieldInColumn(col) + 1, col);
                         _secondPlayerTimer.Stop();
                         GameEnded?.Invoke(this, new Connect4EventArgs(GameState.SECOND, winners));
@@ -194,7 +235,7 @@ namespace Connect4.Model
                     {
                         _firstPlayerTimer.Stop();
                         _secondPlayerTimer.Stop();
-                        GameEnded?.Invoke(this, new Connect4EventArgs(GameState.DRAW, null));
+                        GameEnded?.Invoke(this, new Connect4EventArgs(GameState.DRAW, []));
                         return;
                     }
                 default:
@@ -220,6 +261,8 @@ namespace Connect4.Model
         /// </summary>
         public void Pause()
         {
+            if (_state != GameState.RUNNING)
+                return;
             if (_whichPlayer == WhichPlayer.FIRST)
                 _firstPlayerTimer.Pause();
             else
@@ -229,11 +272,13 @@ namespace Connect4.Model
         }
 
         /// <summary>
-        /// Starts timer, allows insertions.
+        /// Starts timer if the was paused, allows insertions.
         /// </summary>
 
         public void Resume()
         {
+            if (_state != GameState.PAUSED)
+                return;
             if (_whichPlayer == WhichPlayer.FIRST)
                 _firstPlayerTimer.Resume();
             else
@@ -323,6 +368,8 @@ namespace Connect4.Model
         {
             if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
+            if (path == String.Empty)
+                return;
             await _dataAccess.SaveAsync(path, _firstPlayerTimer.RemainingTime, _secondPlayerTimer.RemainingTime, _table);
         }
 
@@ -379,7 +426,7 @@ namespace Connect4.Model
         /// <returns></returns>
 
 
-        public  bool checkDiagonals(int row, int col)
+        private  bool checkDiagonals(int row, int col)
         {
             int counter = 0;
 
@@ -526,7 +573,7 @@ namespace Connect4.Model
             BoardChanged?.Invoke(this, new Connect4FieldEventArgs(row, col));
         }
 
-        private void OnGameEnded((int Row,int Col)[] winners)
+        private void OnGameEnded((int Row, int Col)[]? winners)
         {
             _firstPlayerTimer.Stop();
             _secondPlayerTimer.Stop();
@@ -538,7 +585,7 @@ namespace Connect4.Model
 
         #region Private timer event Handlers
 
-        private void OnTimerTick(object sender, int remainingTime)
+        private void OnTimerTick(object? sender, int remainingTime)
         {
             TimerTick?.Invoke(this,new Connect4TimerEventArgs(_whichPlayer, remainingTime));
         }

@@ -15,36 +15,29 @@ namespace Connect4.Persistance
         { 
             try
             {
-                using (StreamReader reader = new StreamReader(path))
+                using (StreamReader reader = new (path))
                 {
                     string line = await reader.ReadLineAsync() ?? String.Empty;
                     string[] split = line.TrimEnd().Split(' ');
-                    int size;
-                    int firstRemainingTime, secondRemainingTime;
-                    int.TryParse(split[0], out size);
-                    int.TryParse(split[1], out firstRemainingTime);
-                    int.TryParse(split[2], out secondRemainingTime);
-                    GameTable table = new GameTable(size);
+                    if (split.Length != 3 ||
+                    !int.TryParse(split[0], out int size) ||
+                    !int.TryParse(split[1], out int firstRemainingTime) ||
+                    !int.TryParse(split[2], out int secondRemainingTime))
+                        throw new Exception();
+                    GameTable table = new (size);
                     for(int i = 0; i < size; i++)
                     {
                         line = await reader.ReadLineAsync() ?? String.Empty;
                         split = line.TrimEnd().Split(' ');
                         for(int j = 0; j <  size; j++)
                         {
-                            switch(split[j])
+                            table[i, j] = split[j] switch
                             {
-                                case "X":
-                                    table[i, j] = FieldStatus.X;
-                                    break;
-                                case "O":
-                                    table[i, j] = FieldStatus.O;
-                                    break;
-                                case "NONE":
-                                    table[i, j] = FieldStatus.NONE;
-                                    break;
-                                default:
-                                    throw new Connect4FileException();
-                            }
+                                "X" => FieldStatus.X,
+                                "O" => FieldStatus.O,
+                                "NONE" => FieldStatus.NONE,
+                                _ => throw new Exception()
+                            };
                         }
                     }
 
@@ -60,19 +53,19 @@ namespace Connect4.Persistance
         public async Task SaveAsync(string path, int firstRemainingTime, int secondRemainingTime, GameTable gameTable)
         {
             if(path == null)
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             try
             {
-                using (StreamWriter writer = new StreamWriter(path))
+                await using (StreamWriter writer = new (path))
                 {
-                    writer.WriteLineAsync($"{gameTable.Size} {firstRemainingTime} {secondRemainingTime}");
+                    await writer.WriteLineAsync($"{gameTable.Size} {firstRemainingTime} {secondRemainingTime}");
                     for(int i = 0; i < gameTable.Size; i++)
                     {
                         for(int j = 0; j < gameTable.Size; j++)
                         {
-                            writer.WriteAsync($"{gameTable[i, j].ToString()} ");
+                            await writer.WriteAsync($"{gameTable[i, j]} ");
                         }
-                        writer.WriteAsync("\b\n");
+                        await writer.WriteAsync("\b\n");
                     }
                 }
             }
